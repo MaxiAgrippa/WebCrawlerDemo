@@ -149,10 +149,10 @@ public final class Database
      *
      * @return Data(ArrayList < List < String > >)
      */
-    public ArrayList<List<String>> SelectAllFromUrlTextTable ()
+    public ArrayList<String[]> SelectAllFromUrlTextTable ()
     {
         // claim a data set
-        ArrayList<List<String>> Data = new ArrayList<List<String>>();
+        ArrayList<String[]> Data = new ArrayList<String[]>();
         // form the sql command
         String sql = "SELECT id, url, text FROM UrlTextTable";
         try
@@ -168,10 +168,10 @@ public final class Database
             while (resultSet.next())
             {
                 // put results in ResultSet into data set
-                Data.add(Arrays.asList(new String[]{String.valueOf(resultSet.getInt("id")), resultSet.getString("url"),
-                                                    resultSet.getString("text")}));
+                Data.add(new String[]{String.valueOf(resultSet.getInt("id")), resultSet.getString("url"),
+                                      resultSet.getString("text")});
                 // print results
-                System.out.println(Data.get(Data.size() - 1).get(0) + "\t" + Data.get(Data.size() - 1).get(1) + "\t" + Data.get(Data.size() - 1).get(2));
+                System.out.println(Data.get(Data.size() - 1)[0] + "\t" + Data.get(Data.size() - 1)[1] + "\t" + Data.get(Data.size() - 1)[2]);
             }
         } catch (SQLException e)
         {
@@ -237,11 +237,11 @@ public final class Database
     {
         Database database = Database.getInstance();
         //database.InsertToUrlTextTable("url example", "text example");
-        //database.InsertToUrlTextTable("url example01", "text example");
+        database.InsertToUrlTextTable("url example01", "text example");
         //database.InsertToUrlTextTable("url example02", "text example");
 
         database.SelectAllFromUrlTextTable();
-        //database.DeleteInUrlTextTable("url example01");
+        database.DeleteInUrlTextTable("url example01");
         database.SelectAllFromUrlTextTable();
     }
 }
