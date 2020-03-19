@@ -50,11 +50,6 @@ public final class WebCrawler
         {
             try
             {
-                // if we haven't check the link, now we are checking it.
-                if (checkedLinks.add(URL))
-                {
-                    System.out.println("Global Checked Link Added: " + URL);
-                }
                 // add the link to local link log if it not already contained in it
                 if (!localCheckedLinks.contains(URL))
                 {
@@ -72,6 +67,7 @@ public final class WebCrawler
                 // while there is more link to check, and we can run more loops.
                 while (linksOnOnePages.size() > 0 && loopTimes > 0)
                 {
+                    System.out.println("Get into the loop");
                     // get the last element.
                     String url = linksOnOnePages.get(linksOnOnePages.size() - 1);
                     // remove it from the need to visit list.
@@ -84,6 +80,7 @@ public final class WebCrawler
                     }
                     // if this link is not in the checkedLinks, put it in since we gonna visit it now.
                     checkedLinks.add(url);
+                    System.out.println("Global Checked Link Added: " + URL);
                     // get the Document by using Jsoup.
                     document = Jsoup.connect(url).get();
                     // Add value pair to Data <url(String), text(String)>

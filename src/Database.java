@@ -173,6 +173,11 @@ public final class Database
                 // print results
                 System.out.println(Data.get(Data.size() - 1)[0] + "\t" + Data.get(Data.size() - 1)[1] + "\t" + Data.get(Data.size() - 1)[2]);
             }
+            // close connection when it's not closed
+            if (!connection.isClosed())
+            {
+                connection.close();
+            }
         } catch (SQLException e)
         {
             System.out.println("SelectAllFromUrlTextTable() " + e.getMessage());
@@ -202,6 +207,11 @@ public final class Database
             preparedStatement.setString(2, text);
             // try to execute an update sql
             preparedStatement.executeUpdate();
+            // close connection when it's not closed
+            if (!connection.isClosed())
+            {
+                connection.close();
+            }
         } catch (SQLException e)
         {
             System.out.println("InsertToUrlTextTable() " + e.getMessage());
@@ -233,15 +243,43 @@ public final class Database
         }
     }
 
+    /**
+     * Clean UrlTextTable
+     */
+    private void CleanUrlTextTable ()
+    {
+        // form the sql command
+        String sql01 = "DELETE FROM UrlTextTable";
+        String sql02 = "VACUUM";
+        try
+        {
+            // try to create a connection
+            Connection connection = this.connection();
+            Statement statement = connection.createStatement();
+            statement.execute(sql01);
+            statement.execute(sql02);
+            // close connection when it's not closed
+            if (!connection.isClosed())
+            {
+                connection.close();
+            }
+        } catch (SQLException e)
+        {
+            System.out.println("CleanUrlTextTable() " + e.getMessage());
+        }
+    }
+
     public static void main (String[] args)
     {
         Database database = Database.getInstance();
         //database.InsertToUrlTextTable("url example", "text example");
-        database.InsertToUrlTextTable("url example01", "text example");
+        //database.InsertToUrlTextTable("url example01", "text example");
         //database.InsertToUrlTextTable("url example02", "text example");
 
-        database.SelectAllFromUrlTextTable();
-        database.DeleteInUrlTextTable("url example01");
+        //database.SelectAllFromUrlTextTable();
+        //database.DeleteInUrlTextTable("url example01");
+        //database.SelectAllFromUrlTextTable();
+        //database.CleanUrlTextTable();
         database.SelectAllFromUrlTextTable();
     }
 }
