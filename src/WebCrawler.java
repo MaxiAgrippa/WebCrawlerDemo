@@ -1,7 +1,7 @@
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
 
-import javax.lang.model.util.Elements;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.SQLException;
@@ -45,19 +45,23 @@ public final class WebCrawler
         HashSet<String> localCheckedLinks = new HashSet<String>();
         // log links need to check
         ArrayList<String> linksOnOnePages = new ArrayList<String>();
+        //FORTEST:
+        String url = "";
         // Have we checked the link before?
         if (!checkedLinks.contains(URL))
         {
             try
             {
+                //FIXME: USELESS
                 // add the link to local link log if it not already contained in it
-                if (!localCheckedLinks.contains(URL))
-                {
-                    if (localCheckedLinks.add(URL))
-                    {
-                        System.out.println("Local Checked Link Added: " + URL);
-                    }
-                }
+                //                if (!localCheckedLinks.contains(URL))
+                //                {
+                //                    if (localCheckedLinks.add(URL))
+                //                    {
+                //                        System.out.println("Local Checked Link Added: " + URL);
+                //                    }
+                //                }
+
                 // put the link into unchecked group.
                 linksOnOnePages.add(URL);
                 // claim the document object we will use to transact the content we get.
@@ -69,30 +73,38 @@ public final class WebCrawler
                 {
                     System.out.println("Get into the loop");
                     // get the last element.
-                    String url = linksOnOnePages.get(linksOnOnePages.size() - 1);
+                    url = linksOnOnePages.get(linksOnOnePages.size() - 1);
                     // remove it from the need to visit list.
                     linksOnOnePages.remove(linksOnOnePages.size() - 1);
                     // if this link is in side the checkedLinks,
-                    if(checkedLinks.contains(url))
+                    if (url == "" || checkedLinks.contains(url))
                     {
-                        // break the loop, don't do anything with this link.
-                        break;
+                        // continue the loop, don't do anything with this link.
+                        continue;
                     }
                     // if this link is not in the checkedLinks, put it in since we gonna visit it now.
                     checkedLinks.add(url);
-                    System.out.println("Global Checked Link Added: " + URL);
+                    System.out.println("Global Checked Link Added: " + url);
                     // get the Document by using Jsoup.
                     document = Jsoup.connect(url).get();
                     // Add value pair to Data <url(String), text(String)>
-                    Data.add(new String[]{url, document.text()});
+                    Data.add(new String[]{url, document.toString()});
                     // put all the link we can find from that page to linksOnOnePages.
-                    linksOnOnePages.addAll(PatternMatcher.GetUrlsFromString(document.text()));
+                    Elements linksOnPage = document.select("a[href]");
+                    for (Element e : linksOnPage)
+                    {
+                        linksOnOnePages.add(e.attr("abs:href"));
+                    }
                     // finish one loop.
                     loopTimes--;
                 }
-            } catch (IOException e)
+            } catch (IOException iOException)
             {
-                System.out.println("TraversalLinks(), URL Part: " + e.getMessage());
+                System.out.println("TraversalLinks(), URL Part: " + iOException.getMessage());
+            } catch (IllegalArgumentException illegalArgumentException)
+            {
+                System.out.println(url);
+                System.out.println("TraversalLinks(), URL Part: " + illegalArgumentException.getMessage());
             }
 
             // Try to put the result into Database

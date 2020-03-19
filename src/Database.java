@@ -170,8 +170,6 @@ public final class Database
                 // put results in ResultSet into data set
                 Data.add(new String[]{String.valueOf(resultSet.getInt("id")), resultSet.getString("url"),
                                       resultSet.getString("text")});
-                // print results
-                System.out.println(Data.get(Data.size() - 1)[0] + "\t" + Data.get(Data.size() - 1)[1] + "\t" + Data.get(Data.size() - 1)[2]);
             }
             // close connection when it's not closed
             if (!connection.isClosed())
@@ -269,6 +267,39 @@ public final class Database
         }
     }
 
+
+    private void ShowUrlTextTable ()
+    {
+        // form the sql command
+        String sql = "SELECT id, url, text FROM UrlTextTable";
+        try
+        {
+            // try to create a connection
+            Connection connection = this.connection();
+            // try to claim a statement
+            Statement statement = connection.createStatement();
+            // try to execute query sql and put the result into ResultSet
+            ResultSet resultSet = statement.executeQuery(sql);
+            // restore and print result
+            System.out.println("UrlTextTable: ");
+            while (resultSet.next())
+            {
+                // print the result
+                //System.out.println(resultSet.getInt("id") + "\t" + resultSet.getString("url") + "\t" + resultSet.getString("text"));
+                // only print id and url
+                System.out.println(resultSet.getInt("id") + "\t" + resultSet.getString("url"));
+            }
+            // close connection when it's not closed
+            if (!connection.isClosed())
+            {
+                connection.close();
+            }
+        } catch (SQLException e)
+        {
+            System.out.println("SelectAllFromUrlTextTable() " + e.getMessage());
+        }
+    }
+
     public static void main (String[] args)
     {
         Database database = Database.getInstance();
@@ -280,6 +311,7 @@ public final class Database
         //database.DeleteInUrlTextTable("url example01");
         //database.SelectAllFromUrlTextTable();
         //database.CleanUrlTextTable();
-        database.SelectAllFromUrlTextTable();
+        //database.SelectAllFromUrlTextTable();
+        database.ShowUrlTextTable();
     }
 }
