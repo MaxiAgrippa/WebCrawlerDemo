@@ -16,15 +16,13 @@ public final class WebCrawler
     // Instance
     private static final WebCrawler WEB_CRAWLER = new WebCrawler();
 
-    // FIXME: need to use Database to store visited link.
-    private static HashSet<HashSet<String>> VisitedLinks = new HashSet<HashSet<String>>();
     // Using HashSet to store checked links.
     private static HashSet<String> checkedLinks;
-    //
+    // Sqlite Database interface
     private static Database database = Database.getInstance();
 
 
-    // Default Constructor. Don't let anyone initialize this
+    // Singleton Default Constructor. Don't let anyone initialize this
     private WebCrawler ()
     {
         checkedLinks = new HashSet<String>();
@@ -41,27 +39,15 @@ public final class WebCrawler
     {
         // Temporary store data.
         ArrayList<String[]> Data = new ArrayList<String[]>();
-        // Log checked links in this function running time
-        HashSet<String> localCheckedLinks = new HashSet<String>();
         // log links need to check
         ArrayList<String> linksOnOnePages = new ArrayList<String>();
-        //FORTEST:
+        // Claim the link out side try, let it being able to be catch.
         String url = "";
         // Have we checked the link before?
         if (!checkedLinks.contains(URL))
         {
             try
             {
-                //FIXME: USELESS
-                // add the link to local link log if it not already contained in it
-                //                if (!localCheckedLinks.contains(URL))
-                //                {
-                //                    if (localCheckedLinks.add(URL))
-                //                    {
-                //                        System.out.println("Local Checked Link Added: " + URL);
-                //                    }
-                //                }
-
                 // put the link into unchecked group.
                 linksOnOnePages.add(URL);
                 // claim the document object we will use to transact the content we get.
@@ -91,6 +77,7 @@ public final class WebCrawler
                     Data.add(new String[]{url, document.toString()});
                     // put all the link we can find from that page to linksOnOnePages.
                     Elements linksOnPage = document.select("a[href]");
+                    // store them in linksOnOnePages (ArrayList<String>)
                     for (Element e : linksOnPage)
                     {
                         linksOnOnePages.add(e.attr("abs:href"));

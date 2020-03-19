@@ -268,6 +268,9 @@ public final class Database
     }
 
 
+    /**
+     * Show UrlTextTable
+     */
     private void ShowUrlTextTable ()
     {
         // form the sql command
