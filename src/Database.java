@@ -313,7 +313,7 @@ public final class Database
         //database.SelectAllFromUrlTextTable();
         //database.DeleteInUrlTextTable("url example01");
         //database.SelectAllFromUrlTextTable();
-        //database.CleanUrlTextTable();
+        database.CleanUrlTextTable();
         //database.SelectAllFromUrlTextTable();
         database.ShowUrlTextTable();
     }
