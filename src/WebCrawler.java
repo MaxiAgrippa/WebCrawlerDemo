@@ -131,8 +131,13 @@ public final class WebCrawler
         // check if the URL is legitimate
         if (!URL.matches(PatternMatcher.URLPattern.pattern()))
         {
-            // if the URL is not legit, throw Illegal Argument Exception
-            throw new IllegalArgumentException("The input to traversalLinks() is not an url");
+            // see if it can pass with a "/"
+            String newURL = URL + "/";
+            if (!newURL.matches(PatternMatcher.URLPattern.pattern()))
+            {
+                // if the URL is not legit, throw Illegal Argument Exception
+                throw new IllegalArgumentException("The input to traversalLinks() is not an url");
+            }
         }
         // Temporary store data.
         ArrayList<String[]> Data = new ArrayList<String[]>();
@@ -187,10 +192,12 @@ public final class WebCrawler
             } catch (IOException iOException)
             {
                 System.out.println("TraversalLinks(), URL Part: " + iOException.getMessage());
+                iOException.printStackTrace();
             } catch (IllegalArgumentException illegalArgumentException)
             {
                 System.out.println(url);
-                System.out.println("TraversalLinks(), URL Part: " + illegalArgumentException.getMessage());
+                System.out.println("TraversalLinks(), URL Part: " + illegalArgumentException.toString());
+                illegalArgumentException.printStackTrace();
             }
 
             // Try to put the result into Database
