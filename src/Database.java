@@ -163,8 +163,7 @@ public final class Database
             Statement statement = connection.createStatement();
             // try to execute query sql and put the result into ResultSet
             ResultSet resultSet = statement.executeQuery(sql);
-            // restore and print result
-            System.out.println("UrlTextTable: ");
+            // restore esult
             while (resultSet.next())
             {
                 // put results in ResultSet into data set
@@ -271,7 +270,7 @@ public final class Database
     /**
      * Show UrlTextTable
      */
-    private void ShowUrlTextTable ()
+    public void ShowUrlTextTable ()
     {
         // form the sql command
         String sql = "SELECT id, url, text FROM UrlTextTable";
