@@ -43,6 +43,6 @@ public class Pair implements Comparable<Pair>
     @Override
     public int compareTo (Pair o)
     {
-        return (this.getInteger() - o.getInteger() > 0 ? 1 : this.getInteger() - o.getInteger() == 0 ? 0 : -1);
+        return (this.getInteger() - o.getInteger() > 0 ? -1 : this.getInteger() - o.getInteger() == 0 ? 0 : 1);
     }
 }

@@ -160,7 +160,7 @@ public final class WebCrawler
                 // claim the document object we will use to transact the content we get.
                 Document document = null;
                 // control times of the loop
-                int loopTimes = 100;
+                int loopTimes = 5;
                 // while there is more link to check, and we can run more loops.
                 while (linksOnOnePages.size() > 0 && loopTimes > 0)
                 {

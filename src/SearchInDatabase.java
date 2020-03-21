@@ -74,24 +74,10 @@ public final class SearchInDatabase
 
     private int SearchOccurrencesOfWord (String word, String content)
     {
-        // Process content
-        String processedContent = content.replaceAll("([\\,\\.\\+\\-\\?\\:\\'\\\"\\(\\)\\[\\]\\{\\}\\;\\/\\<\\>\\=]+)", "");
-        // Count occurrences
-        int occurrences = 0;
-        // Tokenizer a string
-        StringTokenizer stringTokenizer = new StringTokenizer(processedContent);
-        // while there is more tokens
-        while (stringTokenizer.hasMoreTokens())
-        {
-            // Get next token.
-            String temp = stringTokenizer.nextToken();
-            // If the token equal to the word, occurrences add
-            if (temp.equals(word))
-            {
-                occurrences += 1;
-            }
-        }
+        // Count occurrences, using both lower case to achieve "vague" match.
+        int occurrences = KMP.KMPSearch(word.toLowerCase(), content.toLowerCase());
         return occurrences;
     }
+
 
 }
