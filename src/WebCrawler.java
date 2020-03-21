@@ -128,12 +128,14 @@ public final class WebCrawler
      */
     public static void TraversalLinksInsideWebsite (String URL)
     {
+        // regulated input url
+        String regulatedURL = URL;
         // check if the URL is legitimate
         if (!URL.matches(PatternMatcher.URLPattern.pattern()))
         {
             // see if it can pass with a "/"
-            String newURL = URL + "/";
-            if (!newURL.matches(PatternMatcher.URLPattern.pattern()))
+            regulatedURL = URL + "/";
+            if (!regulatedURL.matches(PatternMatcher.URLPattern.pattern()))
             {
                 // if the URL is not legit, throw Illegal Argument Exception
                 throw new IllegalArgumentException("The input to traversalLinks() is not an url");
@@ -146,14 +148,14 @@ public final class WebCrawler
         // Claim the link out side try, let it being able to be catch.
         String url = "";
         // Have we checked the link before?
-        if (!checkedLinks.contains(URL))
+        if (!checkedLinks.contains(regulatedURL))
         {
             try
             {
                 // put the link into unchecked group.
-                linksOnOnePages.add(URL);
+                linksOnOnePages.add(regulatedURL);
                 // Extract thw website key word from the URL. Used in search.l
-                String Website = URL.replaceFirst("(((http|https|ftp|file):(\\/\\/)))" + "((www.|WWW.)?)", "");
+                String Website = regulatedURL.replaceFirst("(((http|https|ftp|file):(\\/\\/)))" + "((www.|WWW.)?)", "");
                 Website = Website.split("/")[0];
                 // claim the document object we will use to transact the content we get.
                 Document document = null;
@@ -174,17 +176,26 @@ public final class WebCrawler
                     }
                     // if this link is not in the checkedLinks, put it in since we gonna visit it now.
                     checkedLinks.add(url);
+                    // FORTEST:
                     System.out.println("Global Checked Link Added: " + url);
                     // get the Document by using Jsoup.
                     document = Jsoup.connect(url).get();
                     // Add value pair to Data <url(String), text(String)>
                     Data.add(new String[]{url, document.toString()});
-                    // put all the links contain website key words that we can find from that page to linksOnOnePages.
-                    Elements linksOnPage = document.select("a[href*=/" + Website + "/]");
-                    // store them in linksOnOnePages (ArrayList<String>)
+                    // put all the links we can find from that page to linksOnOnePages.
+                    Elements linksOnPage = document.select("a[href]");
+                    // temporary store link.
+                    String templink = "";
+                    // foreach Element in side linksOnPage.
                     for (Element e : linksOnPage)
                     {
-                        linksOnOnePages.add(e.attr("abs:href"));
+                        // get all the href node.
+                        templink = e.attr("abs:href");
+                        // store links that inside the Website in linksOnOnePages (ArrayList<String>)
+                        if (templink.contains(Website))
+                        {
+                            linksOnOnePages.add(templink);
+                        }
                     }
                     // finish one loop.
                     loopTimes--;
