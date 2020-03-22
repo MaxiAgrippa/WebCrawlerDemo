@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public final class PatternMatcher
 {
     // URL regex pattern
-    public static Pattern URLPattern = Pattern.compile("(?:^|[\\W])" + "(((http|https|ftp|file):(\\/\\/)?))" + "(([\\w\\-\\_%]+(@))?)" + "(([\\w\\-\\_%]+\\.)+)" + "([\\w\\-\\_%]+)" + "((:[\\d]{2,5})?)" + "(\\/)" + "((\\/[\\w\\-\\_\\%]+)*)" + "((\\/(#|\\?)[\\w\\-\\.\\_\\~\\:\\/\\?\\#\\[\\]\\@\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\.]+)?)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    public static Pattern URLPattern = Pattern.compile("(?:^|[\\W])" + "(((http|https|ftp|file):(\\/\\/)?))" + "(([\\w\\-\\_\\%]+(@))?)" + "(([\\w\\-\\_\\%]+\\.)+)" + "([\\w\\-\\_\\%]+)" + "((:[\\d]{2,5})?)" + "((\\/[\\w\\-\\_\\%]+)*)" + "(\\/)" + "(((#|\\?)[\\w\\-\\.\\_\\~\\:\\/\\?\\#\\[\\]\\@\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\.]+)?)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     // Singleton Mode
     private static PatternMatcher patternMatcher = new PatternMatcher();
 

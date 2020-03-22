@@ -1,4 +1,6 @@
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 
@@ -160,7 +162,7 @@ public final class WebCrawler
                 // claim the document object we will use to transact the content we get.
                 Document document = null;
                 // control times of the loop
-                int loopTimes = 5;
+                int loopTimes = 10000;
                 // while there is more link to check, and we can run more loops.
                 while (linksOnOnePages.size() > 0 && loopTimes > 0)
                 {
@@ -178,8 +180,17 @@ public final class WebCrawler
                     checkedLinks.add(url);
                     // FORTEST:
                     System.out.println("Global Checked Link Added: " + url);
-                    // get the Document by using Jsoup.
-                    document = Jsoup.connect(url).get();
+                    // try to get the Document by using Jsoup.
+                    try
+                    {
+                        document = Jsoup.connect(url).get();
+                    } catch (IOException iOException)
+                    {
+                        // caused by non-html resource(.zip, .pdf...).
+                        // ignore.
+                        System.out.println("TraversalLinks(), URL Part: " + iOException.getMessage());
+                        System.out.println(url);
+                    }
                     // Add value pair to Data <url(String), text(String)>
                     Data.add(new String[]{url, document.toString()});
                     // put all the links we can find from that page to linksOnOnePages.
@@ -200,10 +211,6 @@ public final class WebCrawler
                     // finish one loop.
                     loopTimes--;
                 }
-            } catch (IOException iOException)
-            {
-                System.out.println("TraversalLinks(), URL Part: " + iOException.getMessage());
-                iOException.printStackTrace();
             } catch (IllegalArgumentException illegalArgumentException)
             {
                 System.out.println(url);
