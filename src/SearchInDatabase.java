@@ -1,17 +1,13 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.security.KeyPair;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.StringTokenizer;
 
 /**
  * @author Maxi Agrippa
  */
-public final class SearchInDatabase
-{
+public final class SearchInDatabase {
     // Singleton mode
     private static SearchInDatabase searchInDatabase = new SearchInDatabase();
     // Store the UrlTextTable
@@ -20,37 +16,33 @@ public final class SearchInDatabase
     private Database database = Database.getInstance();
 
     // Singleton Mode, Don't let anyone implement this
-    private SearchInDatabase ()
-    {
+    private SearchInDatabase() {
         UrlTextTable = new ArrayList<String[]>();
     }
 
     // Singleton Mode, Get Instance
-    public static SearchInDatabase getInstance ()
-    {
+    public static SearchInDatabase getInstance() {
         return searchInDatabase;
     }
 
     // Search keyWord in UrlTextTable, the most related result(appearing most often) will have smallest index.
-    public ArrayList<String> SearchKeyWordInUrlTextTable (String keyWord)
-    {
+    public ArrayList<String> SearchKeyWordInUrlTextTable(String keyWord) {
         //FORTEST:
         System.out.println("SearchKeyWordInUrlTextTable");
         // result set
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         // Sort list
-        ArrayList<Pair> sortList = new ArrayList<Pair>();
+        ArrayList<Pair> sortList = new ArrayList<>();
         // Get UrlTextTable Data
         UrlTextTable = database.SelectAllFromUrlTextTable();
         // Claim a Document
-        Document document = null;
+        Document document;
         // Store Content
-        String content = "";
+        String content;
         // Store Occurrences
-        int occurrences = 0;
+        int occurrences;
         // Foreach row of data in UrlTextTable
-        for (String[] data : UrlTextTable)
-        {
+        for (String[] data : UrlTextTable) {
             // implement a document object with the html string
             document = Jsoup.parse(data[2]);
             // get normalized content from it
@@ -63,21 +55,16 @@ public final class SearchInDatabase
         // sort the result.
         Collections.sort(sortList);
         // output result.
-        for (int i = 0; i < sortList.size(); i++)
-        {
-            result.add(sortList.get(i).getString());
+        for (Pair pair : sortList) {
+            result.add(pair.getString());
             //FORTEST:
-            System.out.println(sortList.get(i).getString());
+            System.out.println(pair.getString());
         }
         return result;
     }
 
-    private int SearchOccurrencesOfWord (String word, String content)
-    {
+    private int SearchOccurrencesOfWord(String word, String content) {
         // Count occurrences, using both lower case to achieve "vague" match.
-        int occurrences = KMP.KMPSearch(word.toLowerCase(), content.toLowerCase());
-        return occurrences;
+        return KMP.KMPSearch(word.toLowerCase(), content.toLowerCase());
     }
-
-
 }

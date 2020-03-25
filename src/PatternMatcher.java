@@ -5,21 +5,18 @@ import java.util.regex.Pattern;
 /**
  * @author Maxi Agrippa
  */
-public final class PatternMatcher
-{
+public final class PatternMatcher {
     // URL regex pattern
     public static Pattern URLPattern = Pattern.compile("(?:^|[\\W])" + "(((http|https|ftp|file):(\\/\\/)?))" + "(([\\w\\-\\_\\%]+(@))?)" + "(([\\w\\-\\_\\%]+\\.)+)" + "([\\w\\-\\_\\%]+)" + "((:[\\d]{2,5})?)" + "((\\/[\\w\\-\\_\\%]+)*)" + "(\\/)" + "(((#|\\?)[\\w\\-\\.\\_\\~\\:\\/\\?\\#\\[\\]\\@\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\.]+)?)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     // Singleton Mode
     private static PatternMatcher patternMatcher = new PatternMatcher();
 
     // Singleton Mode, Don't let anyone implement this
-    private PatternMatcher ()
-    {
+    private PatternMatcher() {
     }
 
     // Singleton Mode, Get Instance
-    public static PatternMatcher getInstance ()
-    {
+    public static PatternMatcher getInstance() {
         return patternMatcher;
     }
 
@@ -29,18 +26,15 @@ public final class PatternMatcher
      * @param text (String)
      * @return ArrayList<String>
      */
-    public static ArrayList<String> GetUrlsFromString (String text)
-    {
+    public static ArrayList<String> GetUrlsFromString(String text) {
         // claim the result set
-        ArrayList<String> urls = new ArrayList<String>();
+        ArrayList<String> urls = new ArrayList<>();
         // claim the matcher and match the text
-        Matcher URLmatcher = URLPattern.matcher(text);
+        Matcher urlMatcher = URLPattern.matcher(text);
         // put every url it find into result set
-        while (URLmatcher.find())
-        {
-            urls.add(URLmatcher.group());
+        while (urlMatcher.find()) {
+            urls.add(urlMatcher.group());
         }
         return urls;
     }
-
 }
