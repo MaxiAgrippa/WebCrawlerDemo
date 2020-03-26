@@ -3,9 +3,7 @@ import java.util.ArrayList;
 
 /**
  * @author Maxi Agrippa
- */
-
-/**
+ *
  * SqLite database store url and text
  */
 public final class Database {

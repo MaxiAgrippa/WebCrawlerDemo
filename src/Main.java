@@ -26,14 +26,14 @@ public class Main {
         // Mashable: doesn't get anything (robots.txt?)
         // WebCrawler.TraversalLinksWithKeyWord("https://mashable.com", "mashable.com/article/");
 
-        // TechCrunch: 100 loops, 99 pages
-        // WebCrawler.TraversalLinksWithKeyWord("https://techcrunch.com", "techcrunch.com/2020");
+        // TechCrunch: 100 loops, 65 pages
+        WebCrawler.TraversalLinksWithKeyWord("https://techcrunch.com", "techcrunch.com/2020");
 
         // The Verge: 100 loops, 45 pages
         // WebCrawler.TraversalLinksWithKeyWord("https://www.theverge.com", "www.theverge.com/2020");
 
         // Engadget: 100 loops, 40 pages (lots of duplicates, hard to fix)
-        WebCrawler.TraversalLinksWithKeyWord("https://www.engadget.com", "www.engadget.com/2020");
+        // WebCrawler.TraversalLinksWithKeyWord("https://www.engadget.com", "www.engadget.com/2020");
 
         //WebCrawler.TraversalLinksInsideWebsite("https://www.coca-cola.ca/");
         //WebCrawler.TraversalLinksWithKeyWord("https://en.coca-colaarabia.com", "coca");

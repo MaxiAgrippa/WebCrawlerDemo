@@ -1,7 +1,9 @@
+package utils;
+
 /**
  * @author Maxi Agrippa
  * <p>
- * Value Pair(int,String)
+ * Value utils.Pair(int,String)
  */
 public class Pair implements Comparable<Pair> {
     public String getString() {
@@ -29,7 +31,7 @@ public class Pair implements Comparable<Pair> {
     }
 
     /**
-     * Compare to Pair with int part.
+     * Compare to utils.Pair with int part.
      *
      * @param o
      * @return
