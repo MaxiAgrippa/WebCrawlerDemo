@@ -19,21 +19,41 @@ import java.util.stream.StreamSupport;
  */
 public class InvertedIndex {
 
+    // The single instance to be retrieved from other classes
+    private static InvertedIndex instance;
     // The Trie structure that contains all the words
-    private static TST<Integer> tst = buildTSTFromTextFiles();
-
+    private static TST<Integer> tst;
     // A map with the list of occurrences by word
-    private static Map<Integer, List<Integer>> occurrencesMap = buildOccurrencesMapFromTextFiles();
-
+    private static Map<Integer, List<Integer>> occurrencesMap;
     // A list with all the URLs
-    private static List<String> urlList = new ArrayList<>();
+    private static List<String> urlList;
+    // A list of "stop-words" that won't be included in the trie
+    private static List<String> stopWords;
+
+    private InvertedIndex() {
+        // private constructor for singleton class
+        stopWords = new ArrayList<>(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "but", "by", "can", "can't", "cannot", "co", "could", "couldn't", "do", "ed", "em", "en", "get", "got", "go", "have", "has", "had", "hasn't", "hadn't", "haven't", "he", "his", "her", "she", "it", "my", "your", "they", "their", "theirs", "hers", "you", "were", "was", "its", "if", "in", "whether", "is", "isn't", "me", "of", "off", "or", "our", "out", "the", "then", "them", "this", "that", "these", "those", "though", "thus", "to", "from", "for", "on", "over", "too", "what", "when", "where", "which", "while", "who", "whom", "whose", "why", "with", "without", "within", "should", "would", "shouldn't", "wouldn't", "yours"));
+        urlList = new ArrayList<>();
+        tst = buildTSTFromTextFiles();
+        occurrencesMap = buildOccurrencesMapFromTextFiles();
+    }
+
+    // Method to return the single instance of the class
+    public static InvertedIndex getInstance() {
+        if (instance == null) {
+            // if instance is null, initialize
+            instance = new InvertedIndex();
+        }
+        return instance;
+    }
 
     /**
      * Method to retrieve all occurrences for a single key
+     *
      * @param key the key to find in the TST
      * @return the list of occurrences
      */
-    public static List<Integer> getOccurrencesForSingleKey(String key) {
+    public List<Integer> getOccurrencesForSingleKey(String key) {
         // TODO Test this method
         if (tst.contains(key)) {
             return occurrencesMap.get(tst.get(key));
@@ -45,21 +65,23 @@ public class InvertedIndex {
 
     /**
      * Getter for the map of all occurrences
+     *
      * @return the map of occurrences
      */
-    public static Map<Integer, List<Integer>> getOccurrencesMap() {
+    public Map<Integer, List<Integer>> getOccurrencesMap() {
         return occurrencesMap;
     }
 
     /**
      * Getter for the list of URLs
+     *
      * @return the list of URLs
      */
-    public static List<String> getUrlList() {
+    public List<String> getUrlList() {
         return urlList;
     }
 
-    private static Map<Integer, List<Integer>> buildOccurrencesMapFromTextFiles() {
+    private Map<Integer, List<Integer>> buildOccurrencesMapFromTextFiles() {
         Map<Integer, List<Integer>> occurrencesMapTemp = new HashMap<>();
         // Get keys from TST
         List<String> keysList = StreamSupport.stream(tst.keys().spliterator(), false)
@@ -68,6 +90,13 @@ public class InvertedIndex {
         for (String key : keysList) {
             List<Integer> list = new ArrayList<>();
             occurrencesMapTemp.put(tst.get(key), list);
+        }
+        // TODO remove this later
+        Iterator<Map.Entry<Integer, List<Integer>>> iterator = occurrencesMapTemp.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, List<Integer>> entry = iterator.next();
+            Integer key = entry.getKey();
+            System.out.println(key);
         }
         // This stream gets each one of the TEXT files for processing from (./static/text/)
         try (Stream<Path> stream = Files.walk(Paths.get("./static/text/"))) {
@@ -92,24 +121,31 @@ public class InvertedIndex {
                         // System.out.println("Key: " + key + "\t\t\t\tValue: " + tst.get(key));
                     }
                 } catch (IOException e) {
-                    System.out.println("Something wrong has happened: " + e.getMessage());
+                    System.out.println("Something wrong has happened while building occurrences map (inside stream):");
+                    System.out.println("File name: " + path.getFileName());
+                    System.out.println(e.toString());
                 }
             });
         } catch (IOException e) {
-            System.out.println("Something wrong has happened: " + e.getMessage());
+            System.out.println("Something wrong has happened while building occurrences map (outside stream):");
+            System.out.println(e.toString());
         }
         return occurrencesMapTemp;
     }
 
     /**
      * A method that creates the TST based on each text file collected by the system
+     *
      * @return the TST with all the words/keys
      */
-    private static TST<Integer> buildTSTFromTextFiles() {
+    private TST<Integer> buildTSTFromTextFiles() {
         TST<Integer> tst = new TST<>();
+        // A count variable to be used as the value in the trie (TST)
+        int count = 0;
         // This stream gets each one of the TEXT files for processing from (./static/text/)
         try (Stream<Path> stream = Files.walk(Paths.get("./static/text/"))) {
-            stream.filter(Files::isRegularFile).forEach(path -> {
+            List<Path> pathList = stream.filter(Files::isRegularFile).collect(Collectors.toList());
+            for (Path path : pathList) {
                 try {
                     String url = Files.readAllLines(path).get(0);
                     urlList.add(url);
@@ -123,17 +159,20 @@ public class InvertedIndex {
                             .stream().map(token -> token.toString().toLowerCase()).collect(Collectors.toList());
 
                     // Insert list elements into the Trie
-                    int tstSize = tst.size();
                     for (String key : tokens) {
-                        if (!tst.contains(key)) {
-                            tst.put(key, tstSize + tokens.indexOf(key));
+                        // Insert in the TST only if key is not there yet AND is not a stop-word
+                        if (!tst.contains(key) && !stopWords.contains(key)) {
+                            tst.put(key, count);
+                            count++;
                         }
                     }
                 } catch (IOException e) {
-                    System.out.println("Something wrong has happened: " + e.getMessage());
+                    System.out.println("Something wrong has happened while building the TST (inside stream):");
+                    System.out.println("File name: " + path.getFileName());
+                    System.out.println(e.toString());
                 }
-            });
-            // TEST Display the content of TST
+            }
+            // TODO remove this later
             // Getting the keys from the TST
             List<String> result = StreamSupport.stream(tst.keys().spliterator(), false)
                     .collect(Collectors.toList());
@@ -141,7 +180,8 @@ public class InvertedIndex {
                 System.out.println("Key: " + s + "\t\t\t\tValue: " + tst.get(s));
             }
         } catch (IOException e) {
-            System.out.println("Something wrong has happened: " + e.getMessage());
+            System.out.println("Something wrong has happened while building the TST (outside stream):");
+            System.out.println(e.toString());
         }
         return tst;
     }
