@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Helper class for IO functions
@@ -22,23 +25,28 @@ public class IOUtils {
      * @param htmlContent the HTML content to be parsed and saved
      */
     public static void saveTextAsTextFile(String url, String htmlContent) {
-        try {
-            // Remove everything after # in URL, if this special character is present
-            if (url.contains("#") || url.contains("/#")) {
-                url = url.substring(0, url.indexOf("#"));
+
+        // A list with "stop-characters", i.e., URLs with these characters won't be saved
+        List<String> stopCharacters = new ArrayList<>(
+                Arrays.asList("#", "?", "&", "!", "%", "$", "=", ";", "§", "*", "+")
+        );
+
+        // Only process a URL if it doesn't contain any stop-character
+        if (stopCharacters.parallelStream().noneMatch(url::contains)) {
+            try {
+                // Create the name of the file
+                String fileName = "./static/text/" + url.replaceAll("(https?)?(www)?\\W*", "") + ".txt";
+                // Parse the HTML content
+                Document document = Jsoup.parse(htmlContent);
+                // Write two lines in the file, one for URL, another for the text
+                FileWriter fw = new FileWriter(fileName);
+                String newLine = System.getProperty("line.separator");
+                fw.write(url + newLine);
+                fw.write(document.text());
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            // Create the name of the file
-            String fileName = "./static/text/" + url.replaceAll("(https?)?(www)?\\W*", "") + ".txt";
-            // Parse the HTML content
-            Document document = Jsoup.parse(htmlContent);
-            // Write two lines in the file, one for URL, another for the text
-            FileWriter fw = new FileWriter(fileName);
-            String newLine = System.getProperty("line.separator");
-            fw.write(url + newLine);
-            fw.write(document.text());
-            fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

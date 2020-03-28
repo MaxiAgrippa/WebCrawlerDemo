@@ -35,7 +35,7 @@ public class InvertedIndex {
         stopWords = new ArrayList<>(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "but", "by", "can", "can't", "cannot", "co", "could", "couldn't", "do", "ed", "em", "en", "get", "got", "go", "have", "has", "had", "hasn't", "hadn't", "haven't", "he", "his", "her", "she", "it", "my", "your", "they", "their", "theirs", "hers", "you", "were", "was", "its", "if", "in", "whether", "is", "isn't", "me", "of", "off", "or", "our", "out", "the", "then", "them", "this", "that", "these", "those", "though", "thus", "to", "from", "for", "on", "over", "too", "what", "when", "where", "which", "while", "who", "whom", "whose", "why", "with", "without", "within", "should", "would", "shouldn't", "wouldn't", "yours"));
         urlList = new ArrayList<>();
         tst = buildTSTFromTextFiles();
-        occurrencesMap = buildOccurrencesMapFromTextFiles();
+        occurrencesMap = buildInitialEmptyOccurrencesMap();
     }
 
     // Method to return the single instance of the class
@@ -54,8 +54,43 @@ public class InvertedIndex {
      * @return the list of occurrences
      */
     public List<Integer> getOccurrencesForSingleKey(String key) {
-        // TODO Test this method
+        // Only process the key if it is present in the TST data structure
         if (tst.contains(key)) {
+            // This stream gets each one of the TEXT files for processing from (./static/text/)
+            try (Stream<Path> stream = Files.walk(Paths.get("./static/text/"))) {
+                List<Path> pathList = stream.filter(Files::isRegularFile).collect(Collectors.toList());
+                for (Path path : pathList) {
+                    try {
+                        // Get text from the file
+                        String content = "";
+                        if (Files.readAllLines(path).size() > 1) {
+                            content = Files.readAllLines(path).get(1);
+                        } else {
+                            System.out.println("File without two lines: " + path.getFileName());
+                            continue;
+                        }
+                        // Check whether the key is present in the text and get the number of occurrences, if it is.
+                        // Get list of offsets (occurrences) for the key
+                        List<Integer> keyOffsets =
+                                PatternMatchingUtils.getSinglePatternOffsetsInText(key.toLowerCase(),
+                                        content.toLowerCase(),
+                                        PatternMatchingEnum.BOYER_MOORE.value);
+                        // Retrieve the list of occurrences from the map, for that key
+                        List<Integer> keyOccurrences = occurrencesMap.get(tst.get(key));
+                        // Add the number of occurrences to this list
+                        keyOccurrences.add(keyOffsets.size());
+                        // Put it back to the map (update the map)
+                        occurrencesMap.put(tst.get(key), keyOccurrences);
+                    } catch (IOException e) {
+                        System.out.println("Something wrong has happened while building occurrences map (inside stream):");
+                        System.out.println("File name: " + path.getFileName());
+                        System.out.println(e.toString());
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Something wrong has happened while building occurrences map (outside stream):");
+                System.out.println(e.toString());
+            }
             return occurrencesMap.get(tst.get(key));
         } else {
             // Key not found, simply return an empty list back to the caller
@@ -64,7 +99,7 @@ public class InvertedIndex {
     }
 
     /**
-     * Getter for the map of all occurrences
+     * Getter for the map of occurrences
      *
      * @return the map of occurrences
      */
@@ -81,7 +116,7 @@ public class InvertedIndex {
         return urlList;
     }
 
-    private Map<Integer, List<Integer>> buildOccurrencesMapFromTextFiles() {
+    private Map<Integer, List<Integer>> buildInitialEmptyOccurrencesMap() {
         Map<Integer, List<Integer>> occurrencesMapTemp = new HashMap<>();
         // Get keys from TST
         List<String> keysList = StreamSupport.stream(tst.keys().spliterator(), false)
@@ -90,45 +125,6 @@ public class InvertedIndex {
         for (String key : keysList) {
             List<Integer> list = new ArrayList<>();
             occurrencesMapTemp.put(tst.get(key), list);
-        }
-        // TODO remove this later
-        Iterator<Map.Entry<Integer, List<Integer>>> iterator = occurrencesMapTemp.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, List<Integer>> entry = iterator.next();
-            Integer key = entry.getKey();
-            System.out.println(key);
-        }
-        // This stream gets each one of the TEXT files for processing from (./static/text/)
-        try (Stream<Path> stream = Files.walk(Paths.get("./static/text/"))) {
-            stream.filter(Files::isRegularFile).forEach(path -> {
-                try {
-                    // Get text from file
-                    String content = Files.readAllLines(path).get(1);
-
-                    // Iterate through the keys and find occurrences in that file for each one of the keys
-                    for (String key : keysList) {
-                        // Get list of offsets (occurrences) for a specific key
-                        List<Integer> keyOffsets =
-                                PatternMatchingUtils.getSinglePatternOffsetsInText(key,
-                                        content,
-                                        PatternMatchingEnum.BOYER_MOORE.value);
-                        // Retrieve the list of occurrences from the map, for that key
-                        List<Integer> keyOccurrences = occurrencesMapTemp.get(tst.get(key));
-                        // Add the number of occurrences to this list
-                        keyOccurrences.add(keyOffsets.size());
-                        // Put it back to the map (update the map)
-                        occurrencesMapTemp.put(tst.get(key), keyOccurrences);
-                        // System.out.println("Key: " + key + "\t\t\t\tValue: " + tst.get(key));
-                    }
-                } catch (IOException e) {
-                    System.out.println("Something wrong has happened while building occurrences map (inside stream):");
-                    System.out.println("File name: " + path.getFileName());
-                    System.out.println(e.toString());
-                }
-            });
-        } catch (IOException e) {
-            System.out.println("Something wrong has happened while building occurrences map (outside stream):");
-            System.out.println(e.toString());
         }
         return occurrencesMapTemp;
     }
@@ -147,15 +143,21 @@ public class InvertedIndex {
             List<Path> pathList = stream.filter(Files::isRegularFile).collect(Collectors.toList());
             for (Path path : pathList) {
                 try {
-                    String url = Files.readAllLines(path).get(0);
-                    urlList.add(url);
-                    String content = Files.readAllLines(path).get(1);
+                    String content = "";
+                    if (Files.readAllLines(path).size() > 1) {
+                        String url = Files.readAllLines(path).get(0);
+                        urlList.add(url);
+                        content = Files.readAllLines(path).get(1);
+                    } else {
+                        System.out.println("File without two lines: " + path.getFileName());
+                        continue;
+                    }
 
                     // Use StringTokenizer to extract the content of the text into a list
                     List<String> tokens = Collections.list(
                             new StringTokenizer(
                                     content,
-                                    "\"“”‘’/[]{}£€≈•…$!&§%=?*:+#@;,._() \t\n\r\f"))
+                                    "\"“”/[]{}£€≈•…$!&§%=?*:+#@;,._() \t\n\r\f"))
                             .stream().map(token -> token.toString().toLowerCase()).collect(Collectors.toList());
 
                     // Insert list elements into the Trie
@@ -171,13 +173,6 @@ public class InvertedIndex {
                     System.out.println("File name: " + path.getFileName());
                     System.out.println(e.toString());
                 }
-            }
-            // TODO remove this later
-            // Getting the keys from the TST
-            List<String> result = StreamSupport.stream(tst.keys().spliterator(), false)
-                    .collect(Collectors.toList());
-            for (String s : result) {
-                System.out.println("Key: " + s + "\t\t\t\tValue: " + tst.get(s));
             }
         } catch (IOException e) {
             System.out.println("Something wrong has happened while building the TST (outside stream):");
