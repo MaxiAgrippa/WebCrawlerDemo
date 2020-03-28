@@ -29,6 +29,9 @@ public class WebCrawlerWindow
 
     public WebCrawlerWindow ()
     {
+        // below tow lines fix first time click no responding bug.
+        rootPanel.revalidate();
+        rootPanel.repaint();
         searchButton.addMouseListener(new MouseAdapter()
         {
             @Override
@@ -47,8 +50,11 @@ public class WebCrawlerWindow
             public void mouseClicked (MouseEvent e)
             {
                 super.mouseClicked(e);
-                textField2.setText("Button Clicked.");
-                textPane2.setText("Button Clicked pane");
+                String url = textField2.getText();
+                HtmlToText htmlToText = HtmlToText.getInstance();
+                String result = htmlToText.HtmlToText(url);
+                textField2.setText(url);
+                textPane2.setText(result);
                 subPanel02.revalidate();
                 subPanel02.repaint();
             }
@@ -62,11 +68,11 @@ public class WebCrawlerWindow
                 String url = textField3.getText();
                 FindingEmailAddressInAPage findingEmailAddressInAPage = FindingEmailAddressInAPage.getInstance();
                 ArrayList<String> results = findingEmailAddressInAPage.FindingEmailAddressInAPage(url);
-                textField3.setText("Button Clicked.");
+                textField3.setText(url);
                 String result = "";
                 for (String s : results)
                 {
-                    result += s + "\n\r";
+                    result += s + "\n";
                 }
                 textPane3.setText(result);
                 subPanel03.revalidate();
