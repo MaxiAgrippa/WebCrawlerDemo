@@ -39,10 +39,10 @@ public class Main {
         //Database.getInstance().ShowUrlTextTable();
         //SearchInDatabase.getInstance().SearchKeyWordInUrlTextTable("location");
 
-        JFrame jFrame = new JFrame("WebCrawler");
-        jFrame.setContentPane(new WebCrawlerWindow().rootPanel);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.pack();
-        jFrame.setVisible(true);
+//        JFrame jFrame = new JFrame("WebCrawler");
+//        jFrame.setContentPane(new WebCrawlerWindow().rootPanel);
+//        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        jFrame.pack();
+//        jFrame.setVisible(true);
     }
 }
