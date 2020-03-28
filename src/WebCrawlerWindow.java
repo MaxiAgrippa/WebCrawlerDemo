@@ -1,8 +1,7 @@
-package UI;
-
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * @author Maxi Agrippa
@@ -60,8 +59,16 @@ public class WebCrawlerWindow
             public void mouseClicked (MouseEvent e)
             {
                 super.mouseClicked(e);
+                String url = textField3.getText();
+                FindingEmailAddressInAPage findingEmailAddressInAPage = FindingEmailAddressInAPage.getInstance();
+                ArrayList<String> results = findingEmailAddressInAPage.FindingEmailAddressInAPage(url);
                 textField3.setText("Button Clicked.");
-                textPane3.setText("Button Clicked pane");
+                String result = "";
+                for (String s : results)
+                {
+                    result += s + "\n\r";
+                }
+                textPane3.setText(result);
                 subPanel03.revalidate();
                 subPanel03.repaint();
             }

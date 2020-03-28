@@ -1,10 +1,5 @@
-import UI.WebCrawlerWindow;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
 import javax.swing.*;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author Maxi Agrippa
