@@ -85,8 +85,15 @@ public class WebCrawlerWindow
             public void mouseClicked (MouseEvent e)
             {
                 super.mouseClicked(e);
-                textField4.setText("Button Clicked.");
-                textPane4.setText("Button Clicked pane");
+                String result = "";
+                String url = textField4.getText();
+                ArrayList<String> results = WebCrawler.TraversalLinksInsideWebsiteWithoutStore(url);
+                for (String s : results)
+                {
+                    result += s + "\n";
+                }
+                textField4.setText(url);
+                textPane4.setText(result);
                 subPanel04.revalidate();
                 subPanel04.repaint();
             }
