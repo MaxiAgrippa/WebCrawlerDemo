@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Maxi Agrippa
@@ -38,8 +40,26 @@ public class WebCrawlerWindow
             public void mouseClicked (MouseEvent e)
             {
                 super.mouseClicked(e);
-                textField1.setText("Button Clicked.");
-                textPane1.setText("Button Clicked pane");
+                StringBuilder result = new StringBuilder();
+                String keyword = textField1.getText();
+                if (keyword.isEmpty()) {
+                    textPane1.setText("No results have been found for the provided keyword.");
+                } else {
+                    Map<String, Integer> resultMap = WebSearchEngine.rankTopPagesByKeyword(keyword);
+                    if (!resultMap.isEmpty()) {
+                        Iterator<Map.Entry<String, Integer>> iterator = resultMap.entrySet().iterator();
+                        while (iterator.hasNext()) {
+                            Map.Entry<String, Integer> entry = iterator.next();
+                            String url = entry.getKey();
+                            Integer value = entry.getValue();
+                            result.append("URL: ").append(url).append(" | Occurrences: ").append(value).append("\n\r");
+                            textPane1.setText(result.toString());
+                        }
+                    } else {
+                        textPane1.setText("No results have been found for the provided keyword.");
+                    }
+                }
+                // textField1.setText("Button Clicked.");
                 subPanel01.revalidate();
                 subPanel01.repaint();
             }
@@ -98,5 +118,13 @@ public class WebCrawlerWindow
                 subPanel04.repaint();
             }
         });
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("WebCrawlerWindow");
+        frame.setContentPane(new WebCrawlerWindow().rootPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
     }
 }

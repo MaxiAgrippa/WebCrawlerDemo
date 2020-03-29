@@ -5,9 +5,6 @@ import org.jsoup.nodes.Document;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +40,35 @@ public class IOUtils {
                 String newLine = System.getProperty("line.separator");
                 fw.write(url + newLine);
                 fw.write(document.text());
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * A method to save HTML content as an HTML file
+     * @param url the URL to be saved
+     * @param htmlContent the HTML content to be saved
+     */
+    public static void saveTextAsHtmlFile(String url, String htmlContent) {
+
+        // A list with "stop-characters", i.e., URLs with these characters won't be saved
+        List<String> stopCharacters = new ArrayList<>(
+                Arrays.asList("#", "?", "&", "!", "%", "$", "=", ";", "§", "*", "+")
+        );
+
+        // Only process a URL if it doesn't contain any stop-character
+        if (stopCharacters.parallelStream().noneMatch(url::contains)) {
+            try {
+                // Create the name of the file
+                String fileName = "./static/html/" + url.replaceAll("(https?)?(www)?\\W*", "") + ".htm";
+                // Write two lines in the file, one for URL, another for the HTML content
+                FileWriter fw = new FileWriter(fileName);
+                String newLine = System.getProperty("line.separator");
+                fw.write(url + newLine);
+                fw.write(htmlContent);
                 fw.close();
             } catch (IOException e) {
                 e.printStackTrace();

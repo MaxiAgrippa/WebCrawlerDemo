@@ -54,6 +54,8 @@ public class InvertedIndex {
      * @return the list of occurrences
      */
     public List<Integer> getOccurrencesForSingleKey(String key) {
+        // Initially, make the key all lower case
+        key = key.toLowerCase();
         // Only process the key if it is present in the TST data structure
         if (tst.contains(key)) {
             // This stream gets each one of the TEXT files for processing from (./static/text/)
@@ -72,7 +74,7 @@ public class InvertedIndex {
                         // Check whether the key is present in the text and get the number of occurrences, if it is.
                         // Get list of offsets (occurrences) for the key
                         List<Integer> keyOffsets =
-                                PatternMatchingUtils.getSinglePatternOffsetsInText(key.toLowerCase(),
+                                PatternMatchingUtils.getSinglePatternOffsetsInText(key,
                                         content.toLowerCase(),
                                         PatternMatchingEnum.BOYER_MOORE.value);
                         // Retrieve the list of occurrences from the map, for that key

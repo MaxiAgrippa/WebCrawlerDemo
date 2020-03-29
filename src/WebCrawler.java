@@ -360,7 +360,8 @@ public final class WebCrawler
                 for (String[] stringArray : Data)
                 {
                     // FIXME Is this the best alternative for embedded db?
-                    IOUtils.saveTextAsTextFile(stringArray[0], stringArray[1]);
+                    // IOUtils.saveTextAsTextFile(stringArray[0], stringArray[1]);
+                    IOUtils.saveTextAsHtmlFile(stringArray[0], stringArray[1]);
                     //database.InsertToUrlTextTable(stringArray[0], stringArray[1]); // 0 = URL, 1 = text
                 }
                 // clean Data for next use.
