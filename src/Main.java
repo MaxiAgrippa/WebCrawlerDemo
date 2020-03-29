@@ -13,7 +13,7 @@ public class Main {
         //WebCrawler.TraversalLinksInsideWebsite("https://mkyong.com/java");
 
         // BBC: 100 loops, got around 15 useful pages
-        WebCrawler.TraversalLinksWithKeyWord("https://www.bbc.com/news/technology", "www.bbc.com/news/technology");
+        // WebCrawler.TraversalLinksWithKeyWord("https://www.bbc.com/news/technology", "www.bbc.com/news/technology");
 
         // C-NET: 100 loops, 60 pages
         // WebCrawler.TraversalLinksWithKeyWord("https://www.cnet.com/news/", "www.cnet.com/news");
