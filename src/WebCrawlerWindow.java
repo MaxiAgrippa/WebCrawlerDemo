@@ -124,7 +124,7 @@ public class WebCrawlerWindow
         JFrame frame = new JFrame("WebCrawlerWindow");
         frame.setContentPane(new WebCrawlerWindow().rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setSize(1000, 600);
         frame.setVisible(true);
     }
 }

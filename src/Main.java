@@ -24,13 +24,23 @@ public class Main {
         // Mashable: doesn't get anything (robots.txt?)
         // WebCrawler.TraversalLinksWithKeyWord("https://mashable.com", "mashable.com/article/");
 
+        // CBC News Tech - https://www.cbc.ca/news/technology/epa-enforcement-covid-19-1.5512023
+        // WebCrawler.TraversalLinksWithKeyWord("https://www.cbc.ca/news/technology", "www.cbc.ca/news/technology");
+
+        // IT World Canada
+        //WebCrawler.TraversalLinksWithKeyWord("https://www.itworldcanada.com/", "www.itworldcanada.com/article");
+
+        // Canadian Business https://www.canadianbusiness.com/technology-news/apple-iphone-8-and-x-10-things-you-need-to-know/
+        //WebCrawler.TraversalLinksWithKeyWord("https://www.canadianbusiness.com/technology-news/", "www.canadianbusiness.com/technology-news");
+
         // TechCrunch: 100 loops, 65 pages
         // WebCrawler.TraversalLinksWithKeyWord("https://techcrunch.com", "techcrunch.com/2020");
 
         // The Verge: 100 loops, 45 pages
         // WebCrawler.TraversalLinksWithKeyWord("https://www.theverge.com", "www.theverge.com/2020");
+        // WebCrawler.TraversalLinksWithKeyWord("https://www.theverge.com/archives/tech/2019/1", "www.theverge.com/2019");
 
-        // Engadget: 100 loops, 40 pages (lots of duplicates, hard to fix)
+        // Engadget: 100 loops, 40 pages
         // WebCrawler.TraversalLinksWithKeyWord("https://www.engadget.com", "www.engadget.com/2020");
 
         //WebCrawler.TraversalLinksInsideWebsite("https://www.coca-cola.ca/");
@@ -38,11 +48,5 @@ public class Main {
         //WebCrawler.TraversalLinksInsideWebsite("https://mkyong.com");
         //Database.getInstance().ShowUrlTextTable();
         //SearchInDatabase.getInstance().SearchKeyWordInUrlTextTable("location");
-
-//        JFrame jFrame = new JFrame("WebCrawler");
-//        jFrame.setContentPane(new WebCrawlerWindow().rootPanel);
-//        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        jFrame.pack();
-//        jFrame.setVisible(true);
     }
 }
