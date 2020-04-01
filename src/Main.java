@@ -8,9 +8,6 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        //WebCrawler.TraversalLinks("https://www.pepsi.com/");
-        //WebCrawler.TraversalLinksInsideWebsite("https://www.pepsi.com/");
-        //WebCrawler.TraversalLinksInsideWebsite("https://mkyong.com/java");
 
         // BBC: 100 loops, got around 15 useful pages
         // WebCrawler.TraversalLinksWithKeyWord("https://www.bbc.com/news/technology", "www.bbc.com/news/technology");
@@ -42,11 +39,5 @@ public class Main {
 
         // Engadget: 100 loops, 40 pages
         // WebCrawler.TraversalLinksWithKeyWord("https://www.engadget.com", "www.engadget.com/2020");
-
-        //WebCrawler.TraversalLinksInsideWebsite("https://www.coca-cola.ca/");
-        //WebCrawler.TraversalLinksWithKeyWord("https://en.coca-colaarabia.com", "coca");
-        //WebCrawler.TraversalLinksInsideWebsite("https://mkyong.com");
-        //Database.getInstance().ShowUrlTextTable();
-        //SearchInDatabase.getInstance().SearchKeyWordInUrlTextTable("location");
     }
 }
