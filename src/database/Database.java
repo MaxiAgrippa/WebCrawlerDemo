@@ -1,3 +1,5 @@
+package database;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -18,10 +20,10 @@ public final class Database {
 
     // Singleton Mode
     private static Database DATABASE = new Database();
-    // Database Dictionary URL
-    String DATABASE_DICTIONARY_URL = "jdbc:sqlite:./Database/";
-    // Database URL
-    String DATABASE_URL = "jdbc:sqlite:./Database/test.db";
+    // database.Database Dictionary URL
+    String DATABASE_DICTIONARY_URL = "jdbc:sqlite:./database.Database/";
+    // database.Database URL
+    String DATABASE_URL = "jdbc:sqlite:./database.Database/test.db";
 
     // Singleton Mode, Don't let anyone implement this
     private Database() {
@@ -35,7 +37,7 @@ public final class Database {
         return DATABASE;
     }
 
-    // Create a new Database
+    // Create a new database.Database
     private void CreateNewDatabase(String fileName) {
         // Form the url of the database
         String url = DATABASE_DICTIONARY_URL + fileName;

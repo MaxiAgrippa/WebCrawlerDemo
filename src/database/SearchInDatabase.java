@@ -1,3 +1,5 @@
+package database;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import utils.KMP;
@@ -14,7 +16,7 @@ public final class SearchInDatabase {
     private static SearchInDatabase searchInDatabase = new SearchInDatabase();
     // Store the UrlTextTable
     private ArrayList<String[]> UrlTextTable;
-    // Database
+    // database.Database
     private Database database = Database.getInstance();
 
     // Singleton Mode, Don't let anyone implement this

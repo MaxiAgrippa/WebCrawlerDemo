@@ -1,4 +1,7 @@
+package functionalities;
+
 import utils.IndexOccurrencePair;
+import utils.InvertedIndex;
 
 import java.util.*;
 

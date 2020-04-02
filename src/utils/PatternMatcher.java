@@ -1,3 +1,5 @@
+package utils;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,7 +10,7 @@ import java.util.regex.Pattern;
 public final class PatternMatcher
 {
     // URL regex pattern
-    public static Pattern URLPattern = Pattern.compile("(?:^|[\\W])" + "(((http|https|ftp|file):(\\/\\/)?))" + "(([\\w\\-\\_\\%]+(@))?)" + "(([\\w\\-\\_\\%]+\\.)+)" + "([\\w\\-\\_\\%]+)" + "((:[\\d]{2,5})?)" + "((\\/[\\w\\-\\_\\%]+)*)" + "(\\/)" + "(((#|\\?)[\\w\\-\\.\\_\\~\\:\\/\\?\\#\\[\\]\\@\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\.]+)?)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    public static Pattern URLPattern = Pattern.compile("((((https?|ftps?|gopher|telnet|nntp):\\/\\/)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?#:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:|:blank:]])?");
     // Email regex pattern
     public static Pattern EmailPattern = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z-.]+");
 

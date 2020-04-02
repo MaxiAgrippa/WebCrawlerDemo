@@ -1,8 +1,12 @@
+package functionalities;
+
+import database.Database;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import utils.IOUtils;
+import utils.PatternMatcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +23,7 @@ public final class WebCrawler
 
     // Using HashSet to store checked links.
     private static HashSet<String> checkedLinks;
-    // Sqlite Database interface
+    // Sqlite database.Database interface
     private static Database database = Database.getInstance();
 
 
@@ -123,7 +127,7 @@ public final class WebCrawler
                 illegalArgumentException.printStackTrace();
             }
 
-            // Try to put the result into Database
+            // Try to put the result into database.Database
             try
             {
                 // get every value pair from Data
@@ -135,7 +139,7 @@ public final class WebCrawler
                 Data.clear();
             } catch (Exception e)
             {
-                System.out.println("TraversalLinks(), Database Part: " + e.getMessage());
+                System.out.println("TraversalLinks(), database.Database Part: " + e.getMessage());
             }
         }
     }
@@ -238,7 +242,7 @@ public final class WebCrawler
                 illegalArgumentException.printStackTrace();
             }
 
-            // Try to put the result into Database
+            // Try to put the result into database.Database
             try
             {
                 // get every value pair from Data
@@ -252,7 +256,7 @@ public final class WebCrawler
                 Data.clear();
             } catch (Exception e)
             {
-                System.out.println("TraversalLinks(), Database Part: " + e.getMessage());
+                System.out.println("TraversalLinks(), database.Database Part: " + e.getMessage());
             }
         }
     }
@@ -353,7 +357,7 @@ public final class WebCrawler
                 illegalArgumentException.printStackTrace();
             }
 
-            // Try to put the result into Database
+            // Try to put the result into database.Database
             try
             {
                 // get every value pair from Data
@@ -370,7 +374,7 @@ public final class WebCrawler
                 Data.clear();
             } catch (Exception e)
             {
-                System.out.println("TraversalLinks(), Database Part: " + e.getMessage());
+                System.out.println("TraversalLinks(), database.Database Part: " + e.getMessage());
             }
         }
     }

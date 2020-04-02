@@ -1,3 +1,8 @@
+import functionalities.FindingEmailAddressInAPage;
+import functionalities.HtmlToText;
+import functionalities.WebCrawler;
+import functionalities.WebSearchEngine;
+
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -8,7 +13,7 @@ import java.util.Map;
 /**
  * @author Maxi Agrippa
  */
-public class WebCrawlerWindow
+public class WebSearchEngineWindow
 {
     private JTabbedPane tabbedPane1;
     private JPanel subPanel01;
@@ -29,7 +34,7 @@ public class WebCrawlerWindow
     private JButton startButton2;
     private JTextPane textPane4;
 
-    public WebCrawlerWindow ()
+    public WebSearchEngineWindow()
     {
         // below tow lines fix first time click no responding bug.
         rootPanel.revalidate();
@@ -122,7 +127,7 @@ public class WebCrawlerWindow
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("WebCrawlerWindow");
-        frame.setContentPane(new WebCrawlerWindow().rootPanel);
+        frame.setContentPane(new WebSearchEngineWindow().rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         frame.setVisible(true);

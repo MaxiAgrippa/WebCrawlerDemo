@@ -1,5 +1,8 @@
+package functionalities;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import utils.PatternMatcher;
 
 /**
  * @author Maxi Agrippa

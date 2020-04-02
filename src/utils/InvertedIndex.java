@@ -1,6 +1,4 @@
-import utils.PatternMatchingEnum;
-import utils.PatternMatchingUtils;
-import utils.TST;
+package utils;
 
 import java.io.IOException;
 import java.nio.file.Files;
